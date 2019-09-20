@@ -4,6 +4,14 @@
 -   Resolves images
 -   Emits markdown file as a URL
 
+### Defining Metadata
+
+You can supply metadata by placing the following pattern at the top of your markdown file.
+
+```
+--- key: value
+```
+
 ### Loader Options
 
 | Property     | Type     | Required | Description                                     |
