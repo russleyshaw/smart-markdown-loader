@@ -64,3 +64,5 @@ export function replaceAll(data: string, replacer: Map<string, string>): string 
     const re = new RegExp(replacerKeys.map(v => _.escapeRegExp(v)).join("|"), "m");
     return data.replace(re, substr => replacer.get(substr) || substr);
 }
+
+export type Dict<K extends string, V> = { [P in K]: V };

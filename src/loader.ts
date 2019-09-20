@@ -6,7 +6,7 @@ import * as _ from "lodash";
 
 import { readMetadata, getImageUrls, stripMetadata } from "./lib";
 import { RawSourceMap } from "source-map";
-import { hashFilename, replaceAll } from "./util";
+import { hashFilename, replaceAll, Dict } from "./util";
 
 const schema = {
     type: "object",
@@ -32,7 +32,7 @@ export interface MarkdownResolveData {
     /**
      * Meta/Front-matter data from the markdown file.
      */
-    meta: Record<string, string>;
+    meta: Dict<string, string>;
 }
 
 export default function(this: loader.LoaderContext, content: string, map: RawSourceMap, meta: any) {

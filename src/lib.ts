@@ -32,7 +32,3 @@ export function getImageUrls(content: string): Set<string> {
 
     return result;
 }
-
-// export function replaceImageUrls(content: string, replacements: Map<string, string>) {
-//     content.replace(/\!\[.*\]\(.*\)/gm, substring => {});
-// }
