@@ -1,6 +1,7 @@
 import { loader } from "webpack";
 import * as path from "path";
 import * as crypto from "crypto";
+import * as _ from "lodash";
 
 export function regexExecAll(re: RegExp, str: string): RegExpExecArray[] {
     if (!re.global) {
@@ -56,4 +57,10 @@ export function hashFilename(filename: string): string {
     } else {
         return `${basename}${ext}`;
     }
+}
+
+export function replaceAll(data: string, replacer: Map<string, string>): string {
+    const replacerKeys = Array.from(replacer.keys());
+    const re = new RegExp(replacerKeys.map(v => _.escapeRegExp(v)).join("|"), "m");
+    return data.replace(re, substr => replacer.get(substr) || substr);
 }
