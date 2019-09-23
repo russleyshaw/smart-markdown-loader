@@ -18,33 +18,6 @@ export function regexExecAll(re: RegExp, str: string): RegExpExecArray[] {
     return matches;
 }
 
-export async function asyncResolve(self: loader.LoaderContext, context: string, request: string): Promise<string> {
-    return new Promise<string>((resolve, reject) => {
-        self.resolve(context, request, (err, result) => {
-            if (err) return reject(err);
-            return resolve(result);
-        });
-    });
-}
-
-export async function asyncLoadModule(self: loader.LoaderContext, request: string): Promise<string> {
-    return new Promise<string>((resolve, reject) => {
-        self.loadModule(request, (err, result) => {
-            if (err) return reject(err);
-            return resolve(result);
-        });
-    });
-}
-
-export async function asyncReadFile(self: loader.LoaderContext, filepath: string): Promise<Buffer> {
-    return new Promise<Buffer>((resolve, reject) => {
-        self.fs.readFile(filepath, (err: any, result: any) => {
-            if (err) return reject(err);
-            return resolve(result);
-        });
-    });
-}
-
 export function hashFilename(filename: string): string {
     const ext = path.extname(filename);
 

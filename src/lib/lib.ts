@@ -1,9 +1,13 @@
 import { regexExecAll } from "./util";
 
+export function getMetaRegex() {
+    return /^\[\/\/\]: # \"(.*): (.*)\"$/gm;
+}
+
 export function readMetadata(content: string): Record<string, string> {
     let meta: Record<string, string> = {};
 
-    const metaRegex = /^--- (.*): (.*)$/gm;
+    const metaRegex = getMetaRegex();
     const matches = regexExecAll(metaRegex, content);
 
     for (const match of matches) {
@@ -16,7 +20,7 @@ export function readMetadata(content: string): Record<string, string> {
 }
 
 export function stripMetadata(content: string): string {
-    const re = /^--- (.*): (.*)$/gm;
+    const re = getMetaRegex();
     return content.replace(re, "").trimLeft();
 }
 
