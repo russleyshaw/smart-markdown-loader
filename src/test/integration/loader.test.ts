@@ -22,10 +22,9 @@ describe("loader.ts", () => {
         const mdModule = modules.find(m => comparePaths(m.name, mdPath))!;
         expect(mdModule).to.exist;
 
-        expect(mdModule.assets).has.members([
-            "2bee5fa6951ff69c24b9503146393efee731a07d.png",
-            "afd5c27ad81612ea7c95181dab57f57845a06c5f.md"
-        ]);
+        expect(mdModule.assets).lengthOf(2);
+        expect(mdModule.assets!.find(n => n.endsWith(".md"))).to.exist;
+        expect(mdModule.assets!.find(n => n.endsWith(".png"))).to.exist;
 
         expect(mdModule.source).contains('"title":"home"');
         expect(mdModule.source).contains('"author":"russley"');
