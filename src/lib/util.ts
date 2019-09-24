@@ -23,7 +23,7 @@ export function hashFilename(filename: string): string {
 
     const hasher = crypto.createHash("sha1");
     hasher.update(filename);
-    const basename = hasher.digest().toString("hex");
+    const basename = hasher.digest("hex");
 
     if (ext === "") {
         return basename;

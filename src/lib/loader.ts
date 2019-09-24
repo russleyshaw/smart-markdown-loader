@@ -4,7 +4,7 @@ import loaderUtils from "loader-utils";
 import validateOptions from "schema-utils";
 import * as _ from "lodash";
 
-import { readMetadata, getImageUrls, stripMetadata } from "./lib";
+import { getMeta, getImageUrls, stripMetaSection } from "./markdown";
 import { RawSourceMap } from "source-map";
 import { hashFilename, replaceAll, Dict } from "./util";
 
@@ -42,7 +42,7 @@ export default function(this: loader.LoaderContext, content: string, map: RawSou
     const publicPath: string = options.publicPath || "";
     const outputPath: string = options.outputPath || "";
 
-    const strippedMd = stripMetadata(content);
+    const strippedMd = stripMetaSection(content);
 
     // Process images
     const mdImgPaths = getImageUrls(strippedMd);
@@ -67,10 +67,11 @@ export default function(this: loader.LoaderContext, content: string, map: RawSou
     const mdFilepath = path.join(outputPath, mdFilename);
     this.emitFile(mdFilepath, replacedMd, map);
 
+    const mdMeta = getMeta(content);
     const result: MarkdownResolveData = {
-        meta: readMetadata(content),
+        meta: mdMeta,
         url: path.join(publicPath, mdFilepath)
     };
 
-    return `export default ${JSON.stringify(result, null, 4)}`;
+    return `export default ${JSON.stringify(result)}`;
 }
