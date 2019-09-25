@@ -14,7 +14,7 @@
     ],
     "main": "./dist/lib/loader.js",
     "repository": "https://github.com/russleyshaw/smart-markdown-loader",
-    "version": "1.0.3",
+    "version": "1.1.0",
     "license": "MIT",
     "devDependencies": {
         "@types/chai": "^4.2.3",
