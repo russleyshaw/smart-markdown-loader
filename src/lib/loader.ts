@@ -4,7 +4,9 @@ import loaderUtils from "loader-utils";
 import validateOptions from "schema-utils";
 import * as _ from "lodash";
 
-import { getMeta, getImageUrls, stripMetaSection } from "./markdown";
+import fm from "front-matter";
+
+import { getImageUrls } from "./markdown";
 import { RawSourceMap } from "source-map";
 import { hashFilename, replaceAll, Dict } from "./util";
 
@@ -32,7 +34,7 @@ export interface MarkdownResolveData {
     /**
      * Meta/Front-matter data from the markdown file.
      */
-    meta: Dict<string, string>;
+    meta: Dict<string, any>;
 }
 
 export default function(this: loader.LoaderContext, content: string, map: RawSourceMap, meta: any) {
@@ -42,14 +44,15 @@ export default function(this: loader.LoaderContext, content: string, map: RawSou
     const publicPath: string = options.publicPath || "";
     const outputPath: string = options.outputPath || "";
 
-    const strippedMd = stripMetaSection(content);
+    const data = fm(content);
 
     // Process images
-    const mdImgPaths = getImageUrls(strippedMd);
+    const mdImgPaths = getImageUrls(data.body);
     const imagePathMap = new Map<string, string>(); // (mdImgPath, publicImgPath)
     for (const mdImgPath of mdImgPaths) {
         const imgResourcePath = path.resolve(this.context, mdImgPath);
         const imgFilename = hashFilename(imgResourcePath);
+        this.addDependency(imgResourcePath);
         const outputImgPath = path.join(outputPath, imgFilename);
         const publicImgPath = path.join(publicPath, outputImgPath);
         const imgContent = this.fs.readFileSync(imgResourcePath);
@@ -60,16 +63,15 @@ export default function(this: loader.LoaderContext, content: string, map: RawSou
     }
 
     // Replace markdown image paths with public paths
-    const replacedMd = replaceAll(strippedMd, imagePathMap);
+    const replacedMd = replaceAll(data.body, imagePathMap);
 
     // Output markdown file
     const mdFilename = hashFilename(this.resourcePath);
     const mdFilepath = path.join(outputPath, mdFilename);
     this.emitFile(mdFilepath, replacedMd, map);
 
-    const mdMeta = getMeta(content);
     const result: MarkdownResolveData = {
-        meta: mdMeta,
+        meta: data.attributes ?? {},
         url: path.join(publicPath, mdFilepath)
     };
 
