@@ -9,14 +9,14 @@
 You can supply metadata by placing the following pattern at the top of your markdown file.
 
 ```
-###### meta start
+---
 
 key: value
 key: value
 key: value
 ...
 
-###### meta end
+---
 ```
 
 ### Loader Options
